@@ -8,6 +8,6 @@ package com.mycompany.bloodtestscheduler;
  *
  * @author shemeneroje
  */
-public class Scheduler {
+public class Scheduler{
     
 }
