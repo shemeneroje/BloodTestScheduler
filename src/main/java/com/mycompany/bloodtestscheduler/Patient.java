@@ -9,5 +9,39 @@ package com.mycompany.bloodtestscheduler;
  * @author shemeneroje
  */
 public class Patient {
-    
+    private String name;
+    private int age;
+    private String priority; // high, medium, low
+    private String gpDetails;
+    private boolean fromHospital;
+
+    public Patient(String name, int age, String priority, String gpDetails, boolean fromHospital) {
+        this.name = name;
+        this.age = age;
+        this.priority = priority;
+        this.gpDetails = gpDetails;
+        this.fromHospital = fromHospital;
+    }
+
+    public int getPriorityValue() {
+        switch (priority.toLowerCase()) {
+            case "high": return 3;
+            case "medium": return 2;
+            case "low": return 1;
+            default: return 0;
+        }
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public boolean isFromHospital() {
+        return fromHospital;
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + priority + ", Age: " + age + ", From Hospital: " + fromHospital + ")";
+    }
 }
