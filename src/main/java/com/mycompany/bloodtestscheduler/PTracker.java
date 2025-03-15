@@ -9,5 +9,6 @@ package com.mycompany.bloodtestscheduler;
  * @author shemeneroje
  */
 public interface PTracker {
-    
+    void addNoShow(Patient p);
+    void showNoShows();
 }
