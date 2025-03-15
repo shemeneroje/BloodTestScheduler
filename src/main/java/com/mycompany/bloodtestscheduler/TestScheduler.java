@@ -9,5 +9,7 @@ package com.mycompany.bloodtestscheduler;
  * @author shemeneroje
  */
 public interface TestScheduler {
-    
+    void addPatient(Patient p);
+    Patient getNextPatient();
+    boolean isEmpty();
 }
