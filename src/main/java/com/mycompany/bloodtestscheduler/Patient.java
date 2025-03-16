@@ -32,6 +32,31 @@ public class Patient {
         }
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public String getGpDetails() {
+        return gpDetails;
+    }
+
+    public void setGpDetails(String gpDetails) {
+        this.gpDetails = gpDetails;
+    }
+    
+
     public int getAge() {
         return age;
     }
@@ -42,6 +67,8 @@ public class Patient {
 
     @Override
     public String toString() {
-        return name + " (" + priority + ", Age: " + age + ", From Hospital: " + fromHospital + ")";
+        return name + " | " + priority + "| Age: " + age + "| From Hospital: " + fromHospital + ")";
     }
+
+   
 }
