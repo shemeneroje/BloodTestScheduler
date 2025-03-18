@@ -11,31 +11,36 @@ package com.mycompany.bloodtestscheduler;
 public class Patient {
     private String name;
     private int age;
-    private String priority; // high, medium, low
+    private String priority; 
     private String gpDetails;
     private boolean fromHospital;
+    private boolean missedAppointment; 
 
-    public Patient(String name, int age, String priority, String gpDetails, boolean fromHospital) {
+    // Constructor
+    public Patient(String name, int age, String priority, String gpDetails, boolean fromHospital, boolean missedAppointment) {
         this.name = name;
         this.age = age;
         this.priority = priority;
         this.gpDetails = gpDetails;
         this.fromHospital = fromHospital;
+        this.missedAppointment = missedAppointment; 
     }
 
+    // Method to get priority value
     public int getPriorityValue() {
         switch (priority.toLowerCase()) {
-            case "high": return 3;
+            case "urgent": return 3;
             case "medium": return 2;
             case "low": return 1;
             default: return 0;
         }
     }
 
+    // Getter and Setter 
     public String getName() {
         return name;
     }
-
+    
     public void setName(String name) {
         this.name = name;
     }
@@ -55,7 +60,6 @@ public class Patient {
     public void setGpDetails(String gpDetails) {
         this.gpDetails = gpDetails;
     }
-    
 
     public int getAge() {
         return age;
@@ -65,10 +69,20 @@ public class Patient {
         return fromHospital;
     }
 
-    @Override
-    public String toString() {
-        return name + " | " + priority + "| Age: " + age + "| From Hospital: " + fromHospital + ")";
+    public boolean isMissedAppointment() {
+        return missedAppointment;
     }
 
-   
+    public void setMissedAppointment(boolean missedAppointment) {
+        this.missedAppointment = missedAppointment;
+    }
+
+    // toString method for displaying patient information
+    //Stack Overflow (2024), Java - How to Implement toString() Method for a Class. Available at: https://stackoverflow.com/questions/3221639/java-how-to-implement-tostring-method-for-a-class (Accessed: 16 March 2025).
+    @Override
+    public String toString() {
+        return "Name: " + name + " | GP Details: " + priority + " | Age: " + age
+                + " | From Hospital: " + fromHospital + " | Missed Appointment: " + missedAppointment
+                + " | Priority: " + gpDetails;
+    }
 }
