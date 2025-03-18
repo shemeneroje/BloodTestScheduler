@@ -9,59 +9,84 @@ package com.mycompany.bloodtestscheduler;
  * @author shemeneroje
  */
 
+import com.mycompany.bloodtestscheduler.PTrackerInterface;
 import com.mycompany.bloodtestscheduler.Patient;
+import com.mycompany.bloodtestscheduler.PatientC;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
+import java.util.PriorityQueue;
 
-public class PatientQueue {
-    private ArrayList<Patient> queue;
+public class PatientQueue implements PTrackerInterface {
+    private PriorityQueue<Patient> queue;
+    private ArrayList<Patient> noShowList;
 
+    // Constructor
     public PatientQueue() {
-        queue = new ArrayList<>();
+        queue = new PriorityQueue<>(new PatientC());  // Use custom comparator
+        noShowList = new ArrayList<>();
     }
 
-    public int size() {
-        return queue.size();  // Return the size of the queue
+    // Enqueue method to add patients
+    public void enqueue(Patient patient) {
+        queue.offer(patient);  // Adds the patient based on priority
     }
 
-    // Enqueue method to add a patient to the queue
-    public void enqueue(Patient newPatient) {
-        queue.add(newPatient);
-        sortQueue();  // Sort after adding a new patient
+    // Dequeue method to retrieve and remove the highest priority patient
+    public Patient dequeue() {
+        return queue.poll();  // Retrieves and removes the highest priority patient
     }
 
-    // Sort the queue by priority, age, and hospital status
-    private void sortQueue() {
-        // Sorting the queue using Collections.sort and a custom comparator
-        Collections.sort(queue, new Comparator<Patient>() {
-            @Override
-            public int compare(Patient p1, Patient p2) {
-                // Compare by priority
-                int priorityCompare = Integer.compare(p2.getPriorityValue(), p1.getPriorityValue());
-                if (priorityCompare != 0) {
-                    return priorityCompare;
-                }
-                // If priorities are the same, compare by age
-                int ageCompare = Integer.compare(p1.getAge(), p2.getAge());
-                if (ageCompare != 0) {
-                    return ageCompare;
-                }
-                // If age is also the same, compare by hospital status
-                return Boolean.compare(p2.isFromHospital(), p1.isFromHospital());
-            }
-        });
+    // Get sorted patients
+    public ArrayList<Patient> getSortedPatients() {
+        PriorityQueue<Patient> tempQueue = new PriorityQueue<>(queue); 
+        ArrayList<Patient> sortedList = new ArrayList<>();
+        
+        while (!tempQueue.isEmpty()) {
+            sortedList.add(tempQueue.poll()); // Extract in sorted order
+        }
+        
+        return sortedList;
     }
 
-    // Get patient details in a string format
+    // Display patients
     public String getPatientDetails() {
         StringBuilder details = new StringBuilder("*****\n");
-
-        // Add patient details to the string
-        for (Patient patient : queue) {
+        for (Patient patient : getSortedPatients()) {
             details.append(patient.toString()).append("\n");
         }
-
         return details.toString();
     }
-}
+
+    // Add missed patient to the no-show list
+    @Override
+    public void addNoShow(Patient patient) {
+        noShowList.add(patient);  // Add patient to no-show list
+    }
+
+    // Show all no-show patients
+    public String getNoShowDetails() {
+        StringBuilder details = new StringBuilder("No-show patients:\n");
+        for (Patient patient : noShowList) {
+            details.append(patient.toString()).append("\n");
+        }
+        return details.toString();
+    }
+
+    // Implementing from PTrackerInterface
+    @Override
+    public Patient getHighPriority() {
+        return queue.peek();  // Return the highest priority patient
+    }
+
+    // Show all no-show patients
+    @Override
+    public void showNoShows() {
+        System.out.println(getNoShowDetails());  // Show missed patients
+    }
+    
+    // Implementing addPatientToQueue from PTrackerInterface
+    @Override
+    public void addP(Patient patient) {
+        enqueue(patient);  // Enqueue the patient
+    }
+} 
