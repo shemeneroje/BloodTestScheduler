@@ -4,6 +4,8 @@
  */
 package com.mycompany.bloodtestscheduler;
 
+import com.mycompany.bloodtestscheduler.Patient;
+import com.mycompany.bloodtestscheduler.PatientQueue;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -358,21 +360,20 @@ public class BTSGUI extends javax.swing.JFrame {
 
     private void displayBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayBtnActionPerformed
         // TODO add your handling code here:
-        // Displaying the patient list in the queue area
-        StringBuilder sb = new StringBuilder();
-        for (Patient patient : patientList) {
-            sb.append(patient.toString()).append("\n");
-        }
-        queueTa.setText(sb.toString());
-
-        // Display missed appointments in the missed appointments area
+        // Using StringBuilder to efficiently build the display text
+        StringBuilder queueSb = new StringBuilder();
         StringBuilder missedSb = new StringBuilder();
+
         for (Patient patient : patientList) {
+            queueSb.append(patient.toString()).append("\n");
             if (patient.isMissedAppointment()) {
                 missedSb.append(patient.toString()).append("\n");
             }
         }
+
+        queueTa.setText(queueSb.toString());
         missedATa.setText(missedSb.toString());
+    
 
     }//GEN-LAST:event_displayBtnActionPerformed
 
@@ -391,7 +392,7 @@ public class BTSGUI extends javax.swing.JFrame {
         return;
     }
 
-    // Validate age (ensure it's a number and within a reasonable range)
+    // Validate age
     int age = -1;
     try {
         age = Integer.parseInt(ageText);
@@ -399,11 +400,11 @@ public class BTSGUI extends javax.swing.JFrame {
             throw new NumberFormatException();
         }
     } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Please enter a valid age between 1 and 120.");
-        return;  // Exit the method to avoid creating an invalid patient
+        JOptionPane.showMessageDialog(this, "Please enter a valid age.");
+        return;  
     }
 
-    // Validate priority (ensure a valid priority is selected)
+    // Validate priority
     if (priority == null || priority.equals("None")) {
         JOptionPane.showMessageDialog(this, "Please select a valid priority.");
         return;
@@ -438,13 +439,8 @@ public class BTSGUI extends javax.swing.JFrame {
     private void sortBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortBtnActionPerformed
         // TODO add your handling code here:
         // Call the getPatientDetails method to sort the queue and get the sorted details as a string
-        String sortedDetails = patientQueue.getPatientDetails();
-
-        // Ensure the queue is actually sorted and print debug info if necessary
-        System.out.println("Sorted patient details:\n" + sortedDetails);
-
-        // Display the sorted details in the JTextArea (queueTa)
-        queueTa.setText(sortedDetails);
+        String sortedPatients = patientQueue.getPatientDetails();
+        queueTa.setText(sortedPatients);
     }//GEN-LAST:event_sortBtnActionPerformed
     
     private String getPriority() {
@@ -457,7 +453,7 @@ public class BTSGUI extends javax.swing.JFrame {
     private void saveToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("patients.txt", true))) {
             for (Patient patient : patientList) {
-                writer.write(patient.toString());  // Customize Patient toString method as needed
+                writer.write(patient.toString());
                 writer.newLine();
             }
             JOptionPane.showMessageDialog(this, "Patient data saved!");
