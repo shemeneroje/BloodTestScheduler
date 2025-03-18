@@ -8,7 +8,7 @@ package com.mycompany.bloodtestscheduler;
  *
  * @author shemeneroje
  */
-public class Patient {
+public class Patient implements Comparable<Patient>{
     private String name;
     private int age;
     private String priority; 
@@ -25,17 +25,24 @@ public class Patient {
         this.fromHospital = fromHospital;
         this.missedAppointment = missedAppointment; 
     }
+    
+    
 
-    // Method to get priority value
-    public int getPriorityValue() {
-        switch (priority.toLowerCase()) {
-            case "urgent": return 3;
-            case "medium": return 2;
-            case "low": return 1;
-            default: return 0;
+    // Convert priority to a numerical value
+    public int getPriorityLevel() {
+        switch (priority) {
+            case "Urgent": return 3;
+            case "Medium": return 2;
+            case "Low": return 1;
+            default: return 0;  
         }
     }
 
+    @Override
+    public int compareTo(Patient other) {
+        return Integer.compare(this.getPriorityLevel(), other.getPriorityLevel());
+    }
+    
     // Getter and Setter 
     public String getName() {
         return name;
