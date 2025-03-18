@@ -4,6 +4,9 @@
  */
 package com.mycompany.bloodtestscheduler;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -13,6 +16,7 @@ import javax.swing.JOptionPane;
  */
 public class BTSGUI extends javax.swing.JFrame {
     private ArrayList<Patient> patientList;
+    private PatientQueue patientQueue;
 
 
     /**
@@ -21,6 +25,7 @@ public class BTSGUI extends javax.swing.JFrame {
     public BTSGUI() {
         initComponents();
         patientList = new ArrayList<>(); // Initialize the patient list
+        patientQueue = new PatientQueue();
     }
 
     /**
@@ -32,8 +37,10 @@ public class BTSGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
-        buttonGroup2 = new javax.swing.ButtonGroup();
+        priorityRg = new javax.swing.ButtonGroup();
+        HospitalBg = new javax.swing.ButtonGroup();
+        fAppRg = new javax.swing.ButtonGroup();
+        missAppRg = new javax.swing.ButtonGroup();
         TitleLbn = new javax.swing.JLabel();
         nameLbn = new javax.swing.JLabel();
         ageLbn = new javax.swing.JLabel();
@@ -56,6 +63,14 @@ public class BTSGUI extends javax.swing.JFrame {
         noRb = new javax.swing.JRadioButton();
         ageTf = new javax.swing.JTextField();
         gpdTf = new javax.swing.JTextField();
+        missALbn = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        appointmentLbn = new javax.swing.JLabel();
+        appYesRb = new javax.swing.JRadioButton();
+        appNoRb = new javax.swing.JRadioButton();
+        missYesRb = new javax.swing.JRadioButton();
+        missNoRb = new javax.swing.JRadioButton();
+        sortBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,6 +78,7 @@ public class BTSGUI extends javax.swing.JFrame {
         TitleLbn.setFont(new java.awt.Font("Helvetica Neue", 3, 48)); // NOI18N
         TitleLbn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         TitleLbn.setText("Blood Test Scheduler");
+        TitleLbn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         nameLbn.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         nameLbn.setText("Name");
@@ -119,34 +135,66 @@ public class BTSGUI extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup1.add(lowRb);
+        priorityRg.add(lowRb);
         lowRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
         lowRb.setText("Low");
 
-        buttonGroup1.add(mediumRb);
+        priorityRg.add(mediumRb);
         mediumRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
         mediumRb.setText("Medium");
 
-        buttonGroup1.add(highRb);
+        priorityRg.add(highRb);
         highRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
-        highRb.setText("High");
+        highRb.setText("Urgent");
         highRb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 highRbActionPerformed(evt);
             }
         });
 
-        buttonGroup2.add(yesRb);
+        HospitalBg.add(yesRb);
         yesRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
         yesRb.setText("Yes");
 
-        buttonGroup2.add(noRb);
+        HospitalBg.add(noRb);
         noRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
         noRb.setText("No");
 
         ageTf.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
 
         gpdTf.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+
+        missALbn.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        missALbn.setText("Did You Miss Your Last Appointment?");
+
+        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+
+        appointmentLbn.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        appointmentLbn.setText("Is This Your First Appointment ?");
+
+        fAppRg.add(appYesRb);
+        appYesRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        appYesRb.setText("Yes ");
+
+        fAppRg.add(appNoRb);
+        appNoRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        appNoRb.setText("No");
+
+        missAppRg.add(missYesRb);
+        missYesRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        missYesRb.setText("Yes");
+
+        missAppRg.add(missNoRb);
+        missNoRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        missNoRb.setText("No");
+
+        sortBtn.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        sortBtn.setText("Sort");
+        sortBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sortBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -155,11 +203,70 @@ public class BTSGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(nameLbn, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(missALbn)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(123, 123, 123)
+                        .addComponent(queueLbn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sortBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(missedALbn)
+                        .addGap(93, 93, 93))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(337, 337, 337)
+                                .addComponent(missYesRb)
+                                .addGap(28, 28, 28)
+                                .addComponent(missNoRb)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(38, 38, 38)))))
+                .addGap(9, 9, 9)
+                .addComponent(saveBtn)
+                .addGap(102, 102, 102))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(TitleLbn)
+                        .addGap(161, 161, 161))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(appointmentLbn)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(appYesRb)
+                                .addGap(18, 18, 18)
+                                .addComponent(appNoRb)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(yesRb)
+                        .addGap(50, 50, 50)
+                        .addComponent(noRb)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(gpdLbn, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(gpdTf))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(nameLbn, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(nameTf, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(ageLbn)
+                                        .addGap(72, 72, 72)
+                                        .addComponent(ageTf, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(hospitalLbn)
                                     .addGroup(layout.createSequentialGroup()
@@ -171,48 +278,8 @@ public class BTSGUI extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(highRb))))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(41, 41, 41)
-                                .addComponent(nameTf, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(128, 128, 128)
-                        .addComponent(TitleLbn)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(gpdLbn, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ageLbn))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(ageTf, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(gpdTf, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(85, 85, 85)
-                                .addComponent(yesRb)
-                                .addGap(18, 18, 18)
-                                .addComponent(noRb)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(queueLbn)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(missedALbn)
-                                .addGap(93, 93, 93))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(saveBtn)
-                        .addGap(102, 102, 102))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(displayBtn)
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(displayBtn)))
                         .addGap(90, 90, 90))))
         );
         layout.setVerticalGroup(
@@ -220,49 +287,62 @@ public class BTSGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(TitleLbn)
-                .addGap(93, 93, 93)
+                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nameLbn)
                     .addComponent(nameTf, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ageLbn)
+                    .addComponent(ageTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(priorityLbn)
                     .addComponent(lowRb)
                     .addComponent(mediumRb)
                     .addComponent(highRb))
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ageLbn)
-                    .addComponent(ageTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(gpdLbn)
-                            .addComponent(gpdTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(hospitalLbn)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(yesRb)
-                            .addComponent(noRb))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(saveBtn)
+                                .addGap(60, 60, 60)
+                                .addComponent(hospitalLbn)
                                 .addGap(18, 18, 18)
-                                .addComponent(displayBtn))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(31, 31, 31)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(missedALbn, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(queueLbn))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(38, Short.MAX_VALUE))
+                                    .addComponent(yesRb)
+                                    .addComponent(noRb)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(gpdLbn)
+                                    .addComponent(gpdTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(35, 35, 35)
+                                .addComponent(appointmentLbn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(appYesRb)
+                                    .addComponent(appNoRb))
+                                .addGap(8, 8, 8)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(missALbn)
+                                    .addComponent(saveBtn))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel2)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(displayBtn))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(197, 197, 197)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(missYesRb)
+                            .addComponent(missNoRb))))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(missedALbn, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(queueLbn)
+                    .addComponent(sortBtn))
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -278,59 +358,118 @@ public class BTSGUI extends javax.swing.JFrame {
 
     private void displayBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayBtnActionPerformed
         // TODO add your handling code here:
-        // Display the patient information in the queue and missed appointments
-        StringBuilder queueText = new StringBuilder();
-        StringBuilder missedText = new StringBuilder();
-
+        // Displaying the patient list in the queue area
+        StringBuilder sb = new StringBuilder();
         for (Patient patient : patientList) {
-            // Append patient details to the queue display
-            queueText.append(patient.toString()).append("\n");
-            
-            //missedText.append(patient.getName()).append("\n");
+            sb.append(patient.toString()).append("\n");
         }
+        queueTa.setText(sb.toString());
 
-        queueTa.setText(queueText.toString());  // Show queue info
-        missedATa.setText(missedText.toString());  // Show missed appointments                                         
-        
+        // Display missed appointments in the missed appointments area
+        StringBuilder missedSb = new StringBuilder();
+        for (Patient patient : patientList) {
+            if (patient.isMissedAppointment()) {
+                missedSb.append(patient.toString()).append("\n");
+            }
+        }
+        missedATa.setText(missedSb.toString());
+
     }//GEN-LAST:event_displayBtnActionPerformed
 
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
         // TODO add your handling code here:
-        // Save the patient data
-        String name = nameTf.getText();
-        String age = ageTf.getText();
-        String gpd = gpdTf.getText();
+            String name = nameTf.getText();
+    String ageText = ageTf.getText();
+    String gpd = gpdTf.getText();
+    String priority = getPriority();
+    boolean fromHospital = yesRb.isSelected();
+    boolean missedAppointment = missYesRb.isSelected();
 
-        String priority = "Low";
-        if (mediumRb.isSelected()) {
-            priority = "Medium";
-        } else if (highRb.isSelected()) {
-            priority = "High";
+    // Validate name
+    if (name.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter a valid name.");
+        return;
+    }
+
+    // Validate age (ensure it's a number and within a reasonable range)
+    int age = -1;
+    try {
+        age = Integer.parseInt(ageText);
+        if (age <= 0 || age > 120) {  // Checking for valid age range
+            throw new NumberFormatException();
         }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Please enter a valid age between 1 and 120.");
+        return;  // Exit the method to avoid creating an invalid patient
+    }
 
-        boolean isHospitalPatient = yesRb.isSelected();
-        
-        // Validate inputs before creating a new patient
-        if (name.isEmpty() || age.isEmpty() || gpd.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please fill in all fields.");
-            return;
-        }
+    // Validate priority (ensure a valid priority is selected)
+    if (priority == null || priority.equals("None")) {
+        JOptionPane.showMessageDialog(this, "Please select a valid priority.");
+        return;
+    }
 
-        try {
-            int patientAge = Integer.parseInt(age); // Parse age to integer
-            Patient newPatient = new Patient(name, patientAge, gpd, priority, isHospitalPatient);
-            patientList.add(newPatient); // Add the new patient to the list
+    // Creating a new Patient object
+    Patient newPatient = new Patient(name, age, gpd, priority, fromHospital, missedAppointment);
 
-            // Clear the form fields
-            nameTf.setText("");
-            ageTf.setText("");
-            gpdTf.setText("");
-            buttonGroup1.clearSelection();
-            buttonGroup2.clearSelection();
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Invalid age. Please enter a valid number.");
-        }
+    // Adding patient to the list
+    patientList.add(newPatient);
+    
+    // Adding patient to the patientQueue
+    patientQueue.enqueue(newPatient);
+
+
+    // Save the data to the file
+    saveToFile();
+
+    // Showing a message
+    JOptionPane.showMessageDialog(this, "Patient added successfully!");
+    
+    // Clear input fields https://coderanch.com/t/615040/java/clear-Multiple-text-fields
+    nameTf.setText("");
+    ageTf.setText("");
+    gpdTf.setText("");
+    priorityRg.clearSelection();
+    HospitalBg.clearSelection();
+    fAppRg.clearSelection();
+    missAppRg.clearSelection();
     }//GEN-LAST:event_saveBtnActionPerformed
+
+    private void sortBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortBtnActionPerformed
+        // TODO add your handling code here:
+        // Call the getPatientDetails method to sort the queue and get the sorted details as a string
+        String sortedDetails = patientQueue.getPatientDetails();
+
+        // Ensure the queue is actually sorted and print debug info if necessary
+        System.out.println("Sorted patient details:\n" + sortedDetails);
+
+        // Display the sorted details in the JTextArea (queueTa)
+        queueTa.setText(sortedDetails);
+    }//GEN-LAST:event_sortBtnActionPerformed
+    
+    private String getPriority() {
+        if (lowRb.isSelected()) return "Low";
+        if (mediumRb.isSelected()) return "Medium";
+        if (highRb.isSelected()) return "Urgent";
+        return "None";
+    }
+
+    private void saveToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("patients.txt", true))) {
+            for (Patient patient : patientList) {
+                writer.write(patient.toString());  // Customize Patient toString method as needed
+                writer.newLine();
+            }
+            JOptionPane.showMessageDialog(this, "Patient data saved!");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error saving patient data.");
+            
+        }
+        
+        
+        
+    }
+    
 
     /**
      * @param args the command line arguments
@@ -368,29 +507,39 @@ public class BTSGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup HospitalBg;
     private javax.swing.JLabel TitleLbn;
     private javax.swing.JLabel ageLbn;
     private javax.swing.JTextField ageTf;
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JRadioButton appNoRb;
+    private javax.swing.JRadioButton appYesRb;
+    private javax.swing.JLabel appointmentLbn;
     private javax.swing.JButton displayBtn;
+    private javax.swing.ButtonGroup fAppRg;
     private javax.swing.JLabel gpdLbn;
     private javax.swing.JTextField gpdTf;
     private javax.swing.JRadioButton highRb;
     private javax.swing.JLabel hospitalLbn;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JRadioButton lowRb;
     private javax.swing.JRadioButton mediumRb;
+    private javax.swing.JLabel missALbn;
+    private javax.swing.ButtonGroup missAppRg;
+    private javax.swing.JRadioButton missNoRb;
+    private javax.swing.JRadioButton missYesRb;
     private javax.swing.JLabel missedALbn;
     private javax.swing.JTextArea missedATa;
     private javax.swing.JLabel nameLbn;
     private javax.swing.JTextField nameTf;
     private javax.swing.JRadioButton noRb;
     private javax.swing.JLabel priorityLbn;
+    private javax.swing.ButtonGroup priorityRg;
     private javax.swing.JLabel queueLbn;
     private javax.swing.JTextArea queueTa;
     private javax.swing.JButton saveBtn;
+    private javax.swing.JButton sortBtn;
     private javax.swing.JRadioButton yesRb;
     // End of variables declaration//GEN-END:variables
 }
