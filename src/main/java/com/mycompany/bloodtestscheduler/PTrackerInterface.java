@@ -8,6 +8,9 @@ package com.mycompany.bloodtestscheduler;
  *
  * @author shemeneroje
  */
-public interface TestScheduler {
-    
+public interface PTrackerInterface {
+    void addP(Patient p);
+    Patient getHighPriority();
+    void addNoShow(Patient p);
+    void showNoShows();
 }

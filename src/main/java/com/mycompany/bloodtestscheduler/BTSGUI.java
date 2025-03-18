@@ -4,17 +4,30 @@
  */
 package com.mycompany.bloodtestscheduler;
 
+import com.mycompany.bloodtestscheduler.Patient;
+import com.mycompany.bloodtestscheduler.PatientQueue;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author shemeneroje
  */
 public class BTSGUI extends javax.swing.JFrame {
+    private ArrayList<Patient> patientList;
+    private PatientQueue patientQueue;
+
 
     /**
      * Creates new form BTSGUI
      */
     public BTSGUI() {
         initComponents();
+        patientList = new ArrayList<>(); // Initialize the patient list
+        patientQueue = new PatientQueue();
     }
 
     /**
@@ -26,111 +39,164 @@ public class BTSGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
-        buttonGroup2 = new javax.swing.ButtonGroup();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        priorityRg = new javax.swing.ButtonGroup();
+        HospitalBg = new javax.swing.ButtonGroup();
+        fAppRg = new javax.swing.ButtonGroup();
+        missAppRg = new javax.swing.ButtonGroup();
+        TitleLbn = new javax.swing.JLabel();
+        nameLbn = new javax.swing.JLabel();
+        ageLbn = new javax.swing.JLabel();
+        gpdLbn = new javax.swing.JLabel();
+        priorityLbn = new javax.swing.JLabel();
+        hospitalLbn = new javax.swing.JLabel();
+        queueLbn = new javax.swing.JLabel();
+        missedALbn = new javax.swing.JLabel();
+        displayBtn = new javax.swing.JButton();
+        saveBtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        missedATa = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jTextField1 = new javax.swing.JTextField();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
-        jRadioButton5 = new javax.swing.JRadioButton();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        queueTa = new javax.swing.JTextArea();
+        nameTf = new javax.swing.JTextField();
+        lowRb = new javax.swing.JRadioButton();
+        mediumRb = new javax.swing.JRadioButton();
+        highRb = new javax.swing.JRadioButton();
+        yesRb = new javax.swing.JRadioButton();
+        noRb = new javax.swing.JRadioButton();
+        ageTf = new javax.swing.JTextField();
+        gpdTf = new javax.swing.JTextField();
+        missALbn = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        appointmentLbn = new javax.swing.JLabel();
+        appYesRb = new javax.swing.JRadioButton();
+        appNoRb = new javax.swing.JRadioButton();
+        missYesRb = new javax.swing.JRadioButton();
+        missNoRb = new javax.swing.JRadioButton();
+        sortBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setBackground(new java.awt.Color(0, 102, 204));
-        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 3, 48)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Blood Test Scheduler");
+        TitleLbn.setBackground(new java.awt.Color(0, 102, 204));
+        TitleLbn.setFont(new java.awt.Font("Helvetica Neue", 3, 48)); // NOI18N
+        TitleLbn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        TitleLbn.setText("Blood Test Scheduler");
+        TitleLbn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        nameLbn.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        nameLbn.setText("Name");
+
+        ageLbn.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        ageLbn.setText("Age");
+
+        gpdLbn.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        gpdLbn.setText("GP Details");
+
+        priorityLbn.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        priorityLbn.setText("Priority");
+
+        hospitalLbn.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        hospitalLbn.setText("Are You Coming from a Hospital?");
+
+        queueLbn.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        queueLbn.setText("Queue");
+
+        missedALbn.setBackground(new java.awt.Color(255, 51, 51));
+        missedALbn.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        missedALbn.setText("Missed Appointments");
+
+        displayBtn.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        displayBtn.setText("Display");
+        displayBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayBtnActionPerformed(evt);
+            }
+        });
+
+        saveBtn.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        saveBtn.setText("Save");
+        saveBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveBtnActionPerformed(evt);
+            }
+        });
+
+        missedATa.setColumns(20);
+        missedATa.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        missedATa.setRows(5);
+        jScrollPane1.setViewportView(missedATa);
+
+        queueTa.setColumns(20);
+        queueTa.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        queueTa.setRows(5);
+        jScrollPane2.setViewportView(queueTa);
+
+        nameTf.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        nameTf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nameTfActionPerformed(evt);
+            }
+        });
+
+        priorityRg.add(lowRb);
+        lowRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        lowRb.setText("Low");
+
+        priorityRg.add(mediumRb);
+        mediumRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        mediumRb.setText("Medium");
+
+        priorityRg.add(highRb);
+        highRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        highRb.setText("Urgent");
+        highRb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                highRbActionPerformed(evt);
+            }
+        });
+
+        HospitalBg.add(yesRb);
+        yesRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        yesRb.setText("Yes");
+
+        HospitalBg.add(noRb);
+        noRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        noRb.setText("No");
+
+        ageTf.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+
+        gpdTf.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+
+        missALbn.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        missALbn.setText("Did You Miss Your Last Appointment?");
 
         jLabel2.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jLabel2.setText("Name");
 
-        jLabel3.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jLabel3.setText("Age");
+        appointmentLbn.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        appointmentLbn.setText("Is This Your First Appointment ?");
 
-        jLabel4.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jLabel4.setText("GP Details");
+        fAppRg.add(appYesRb);
+        appYesRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        appYesRb.setText("Yes ");
 
-        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jLabel5.setText("Priority");
+        fAppRg.add(appNoRb);
+        appNoRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        appNoRb.setText("No");
 
-        jLabel6.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jLabel6.setText("Are You Coming from a Hospital?");
+        missAppRg.add(missYesRb);
+        missYesRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        missYesRb.setText("Yes");
 
-        jLabel7.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jLabel7.setText("Queue");
+        missAppRg.add(missNoRb);
+        missNoRb.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
+        missNoRb.setText("No");
 
-        jLabel8.setBackground(new java.awt.Color(255, 51, 51));
-        jLabel8.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jLabel8.setText("Missed Appointments");
-
-        jButton1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jButton1.setText("Display");
-
-        jButton2.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jButton2.setText("Save");
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        jTextArea2.setColumns(20);
-        jTextArea2.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
-
-        jTextField1.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        sortBtn.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        sortBtn.setText("Sort");
+        sortBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                sortBtnActionPerformed(evt);
             }
         });
-
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
-        jRadioButton1.setText("Low");
-
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
-        jRadioButton2.setText("Medium");
-
-        buttonGroup1.add(jRadioButton3);
-        jRadioButton3.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
-        jRadioButton3.setText("High");
-        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton3ActionPerformed(evt);
-            }
-        });
-
-        buttonGroup2.add(jRadioButton4);
-        jRadioButton4.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
-        jRadioButton4.setText("Yes");
-
-        buttonGroup2.add(jRadioButton5);
-        jRadioButton5.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
-        jRadioButton5.setText("No");
-
-        jTextField2.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
-
-        jTextField3.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -139,126 +205,267 @@ public class BTSGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(337, 337, 337)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jRadioButton1)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jRadioButton2)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jRadioButton3))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(41, 41, 41)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(missALbn)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(128, 128, 128)
-                        .addComponent(jLabel1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
+                        .addGap(123, 123, 123)
+                        .addComponent(queueLbn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sortBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(missedALbn)
+                        .addGap(93, 93, 93))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(85, 85, 85)
-                                .addComponent(jRadioButton4)
-                                .addGap(18, 18, 18)
-                                .addComponent(jRadioButton5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(missYesRb)
+                                .addGap(28, 28, 28)
+                                .addComponent(missNoRb)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(jLabel7)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel8)
-                                .addGap(93, 93, 93))))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(38, 38, 38)))))
+                .addGap(9, 9, 9)
+                .addComponent(saveBtn)
+                .addGap(102, 102, 102))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(TitleLbn)
+                        .addGap(161, 161, 161))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(appointmentLbn)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(appYesRb)
+                                .addGap(18, 18, 18)
+                                .addComponent(appNoRb)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addGap(102, 102, 102))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(yesRb)
+                        .addGap(50, 50, 50)
+                        .addComponent(noRb)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(gpdLbn, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(gpdTf))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(nameLbn, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(nameTf, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(ageLbn)
+                                        .addGap(72, 72, 72)
+                                        .addComponent(ageTf, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(hospitalLbn)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(priorityLbn)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(lowRb)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(mediumRb)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(highRb))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(displayBtn)))
                         .addGap(90, 90, 90))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(93, 93, 93)
+                .addComponent(TitleLbn)
+                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(nameLbn)
+                    .addComponent(nameTf, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton3))
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ageLbn)
+                    .addComponent(ageTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(priorityLbn)
+                    .addComponent(lowRb)
+                    .addComponent(mediumRb)
+                    .addComponent(highRb))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel6)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jRadioButton4)
-                            .addComponent(jRadioButton5))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(jButton2)
+                                .addGap(60, 60, 60)
+                                .addComponent(hospitalLbn)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(31, 31, 31)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(38, Short.MAX_VALUE))
+                                    .addComponent(yesRb)
+                                    .addComponent(noRb)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(gpdLbn)
+                                    .addComponent(gpdTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(35, 35, 35)
+                                .addComponent(appointmentLbn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(appYesRb)
+                                    .addComponent(appNoRb))
+                                .addGap(8, 8, 8)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(missALbn)
+                                    .addComponent(saveBtn))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel2)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(displayBtn))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(197, 197, 197)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(missYesRb)
+                            .addComponent(missNoRb))))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(missedALbn, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(queueLbn)
+                    .addComponent(sortBtn))
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+    private void highRbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_highRbActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton3ActionPerformed
+    }//GEN-LAST:event_highRbActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void nameTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTfActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_nameTfActionPerformed
+
+    private void displayBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayBtnActionPerformed
+        // TODO add your handling code here:
+        // Using StringBuilder to efficiently build the display text
+        StringBuilder queueSb = new StringBuilder();
+        StringBuilder missedSb = new StringBuilder();
+
+        for (Patient patient : patientList) {
+            queueSb.append(patient.toString()).append("\n");
+            if (patient.isMissedAppointment()) {
+                missedSb.append(patient.toString()).append("\n");
+            }
+        }
+
+        queueTa.setText(queueSb.toString());
+        missedATa.setText(missedSb.toString());
+    
+
+    }//GEN-LAST:event_displayBtnActionPerformed
+
+    private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
+        // TODO add your handling code here:
+            String name = nameTf.getText();
+    String ageText = ageTf.getText();
+    String gpd = gpdTf.getText();
+    String priority = getPriority();
+    boolean fromHospital = yesRb.isSelected();
+    boolean missedAppointment = missYesRb.isSelected();
+
+    // Validate name
+    if (name.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter a valid name.");
+        return;
+    }
+
+    // Validate age
+    int age = -1;
+    try {
+        age = Integer.parseInt(ageText);
+        if (age <= 0 || age > 120) {  // Checking for valid age range
+            throw new NumberFormatException();
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Please enter a valid age.");
+        return;  
+    }
+
+    // Validate priority
+    if (priority == null || priority.equals("None")) {
+        JOptionPane.showMessageDialog(this, "Please select a valid priority.");
+        return;
+    }
+
+    // Creating a new Patient object
+    Patient newPatient = new Patient(name, age, gpd, priority, fromHospital, missedAppointment);
+
+    // Adding patient to the list
+    patientList.add(newPatient);
+    
+    // Adding patient to the patientQueue
+    patientQueue.enqueue(newPatient);
+
+
+    // Save the data to the file
+    saveToFile();
+
+    // Showing a message
+    JOptionPane.showMessageDialog(this, "Patient added successfully!");
+    
+    // Clear input fields https://coderanch.com/t/615040/java/clear-Multiple-text-fields
+    nameTf.setText("");
+    ageTf.setText("");
+    gpdTf.setText("");
+    priorityRg.clearSelection();
+    HospitalBg.clearSelection();
+    fAppRg.clearSelection();
+    missAppRg.clearSelection();
+    }//GEN-LAST:event_saveBtnActionPerformed
+
+    private void sortBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortBtnActionPerformed
+        // TODO add your handling code here:
+        // Call the getPatientDetails method to sort the queue and get the sorted details as a string
+        String sortedPatients = patientQueue.getPatientDetails();
+        queueTa.setText(sortedPatients);
+    }//GEN-LAST:event_sortBtnActionPerformed
+    
+    private String getPriority() {
+        if (lowRb.isSelected()) return "Low";
+        if (mediumRb.isSelected()) return "Medium";
+        if (highRb.isSelected()) return "Urgent";
+        return "None";
+    }
+
+    private void saveToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("patients.txt", true))) {
+            for (Patient patient : patientList) {
+                writer.write(patient.toString());
+                writer.newLine();
+            }
+            JOptionPane.showMessageDialog(this, "Patient data saved!");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error saving patient data.");
+            
+        }
+        
+        
+        
+    }
+    
 
     /**
      * @param args the command line arguments
@@ -296,29 +503,39 @@ public class BTSGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.ButtonGroup HospitalBg;
+    private javax.swing.JLabel TitleLbn;
+    private javax.swing.JLabel ageLbn;
+    private javax.swing.JTextField ageTf;
+    private javax.swing.JRadioButton appNoRb;
+    private javax.swing.JRadioButton appYesRb;
+    private javax.swing.JLabel appointmentLbn;
+    private javax.swing.JButton displayBtn;
+    private javax.swing.ButtonGroup fAppRg;
+    private javax.swing.JLabel gpdLbn;
+    private javax.swing.JTextField gpdTf;
+    private javax.swing.JRadioButton highRb;
+    private javax.swing.JLabel hospitalLbn;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
-    private javax.swing.JRadioButton jRadioButton5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JRadioButton lowRb;
+    private javax.swing.JRadioButton mediumRb;
+    private javax.swing.JLabel missALbn;
+    private javax.swing.ButtonGroup missAppRg;
+    private javax.swing.JRadioButton missNoRb;
+    private javax.swing.JRadioButton missYesRb;
+    private javax.swing.JLabel missedALbn;
+    private javax.swing.JTextArea missedATa;
+    private javax.swing.JLabel nameLbn;
+    private javax.swing.JTextField nameTf;
+    private javax.swing.JRadioButton noRb;
+    private javax.swing.JLabel priorityLbn;
+    private javax.swing.ButtonGroup priorityRg;
+    private javax.swing.JLabel queueLbn;
+    private javax.swing.JTextArea queueTa;
+    private javax.swing.JButton saveBtn;
+    private javax.swing.JButton sortBtn;
+    private javax.swing.JRadioButton yesRb;
     // End of variables declaration//GEN-END:variables
 }
