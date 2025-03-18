@@ -10,26 +10,32 @@ package com.mycompany.bloodtestscheduler;
  */
 import java.util.LinkedList;
 
-public class MissingP implements PTracker {
-    private LinkedList<Patient> noShowList;
+public class MissingP implements PTrackerInterface {
+    private LinkedList<Patient> missingPatients;
 
     public MissingP() {
-        noShowList = new LinkedList<>();
+        missingPatients = new LinkedList<>();
     }
 
     @Override
-    public void addNoShow(Patient p) {
-        if (noShowList.size() == 5) {
-            noShowList.removeFirst();
-        }
-        noShowList.addLast(p);
+    public void addP(Patient patient) {
+        missingPatients.add(patient);
+    }
+
+    @Override
+    public void addNoShow(Patient patient) {
+        missingPatients.add(patient);
+    }
+
+    @Override
+    public Patient getHighPriority() {
+        return missingPatients.peek(); 
     }
 
     @Override
     public void showNoShows() {
-        System.out.println("Last 5 No-Shows:");
-        for (Patient p : noShowList) {
-            System.out.println(p);
+        for (Patient patient : missingPatients) {
+            System.out.println(patient);
         }
     }
 }
